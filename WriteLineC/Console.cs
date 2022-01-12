@@ -123,13 +123,13 @@ namespace TizzyT
                 new(args.text, args.foreColor, args.backColor);
         }
 
-        private static int writeLock = 0;
+        private static int ioLock = 0;
 
-        private static void WriteBase(params ConsoleTextColorInfo[] args)
+        private static void WriteBase(params ConsoleTextColorInfo[] textColorInfo)
         {
             ConsoleColor prevFore = System.Console.ForegroundColor;
             ConsoleColor prevBack = System.Console.BackgroundColor;
-            foreach (ConsoleTextColorInfo arg in args)
+            foreach (ConsoleTextColorInfo arg in textColorInfo)
             {
                 System.Console.ForegroundColor = arg.ForeColor ?? prevFore;
                 System.Console.BackgroundColor = arg.BackColor ?? prevBack;
@@ -142,52 +142,52 @@ namespace TizzyT
         /// <summary>
         /// Synonymous to System.Console.WriteLine() with ability to include ConsoleColor information.
         /// </summary>
-        /// <param name="args"></param>
-        public static void WriteLine(params ConsoleTextColorInfo[] args)
+        /// <param name="textColorInfo">Text and their color information.</param>
+        public static void WriteLine(params ConsoleTextColorInfo[] textColorInfo)
         {
-            while (Interlocked.Exchange(ref writeLock, 1) == 1) ;
-            WriteBase(args);
+            while (Interlocked.Exchange(ref ioLock, 1) == 1) ;
+            WriteBase(textColorInfo);
             System.Console.WriteLine();
-            Interlocked.Exchange(ref writeLock, 0);
+            Interlocked.Exchange(ref ioLock, 0);
         }
 
         /// <summary>
         /// Synonymous to System.Console.Write() with ability to include ConsoleColor information.
         /// </summary>
-        /// <param name="args"></param>        
-        public static void Write(params ConsoleTextColorInfo[] args)
+        /// <param name="textColorInfo">Text and their color information.</param>        
+        public static void Write(params ConsoleTextColorInfo[] textColorInfo)
         {
-            while (Interlocked.Exchange(ref writeLock, 1) == 1) ;
-            WriteBase(args);
-            Interlocked.Exchange(ref writeLock, 0);
+            while (Interlocked.Exchange(ref ioLock, 1) == 1) ;
+            WriteBase(textColorInfo);
+            Interlocked.Exchange(ref ioLock, 0);
         }
 
         /// <summary>
         /// Prompts the user for input after a message.
         /// </summary>
-        /// <param name="message">The message to prompt the user.</param>
+        /// <param name="textColorInfo">Text and their color information.</param>
         /// <returns>The users input.</returns>
-        public static string PromptLine(params ConsoleTextColorInfo[] message)
+        public static string PromptLine(params ConsoleTextColorInfo[] textColorInfo)
         {
-            while (Interlocked.Exchange(ref writeLock, 1) == 1) ;
-            WriteBase(message);
+            while (Interlocked.Exchange(ref ioLock, 1) == 1) ;
+            WriteBase(textColorInfo);
             System.Console.WriteLine();
             string input = System.Console.ReadLine();
-            Interlocked.Exchange(ref writeLock, 0);
+            Interlocked.Exchange(ref ioLock, 0);
             return input;
         }
 
         /// <summary>
         /// Prompts the user for input with a message.
         /// </summary>
-        /// <param name="message">The message to prompt the user.</param>
+        /// <param name="textColorInfo">Text and their color information.</param>
         /// <returns>The users input.</returns>
-        public static string Prompt(params ConsoleTextColorInfo[] message)
+        public static string Prompt(params ConsoleTextColorInfo[] textColorInfo)
         {
-            while (Interlocked.Exchange(ref writeLock, 1) == 1) ;
-            WriteBase(message);
+            while (Interlocked.Exchange(ref ioLock, 1) == 1) ;
+            WriteBase(textColorInfo);
             string input = System.Console.ReadLine();
-            Interlocked.Exchange(ref writeLock, 0);
+            Interlocked.Exchange(ref ioLock, 0);
             return input;
         }
     }
