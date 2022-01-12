@@ -145,7 +145,7 @@ namespace TizzyT
         /// <param name="textColorInfo">Text and their color information.</param>
         public static void WriteLine(params ConsoleTextColorInfo[] textColorInfo)
         {
-            while (Interlocked.Exchange(ref ioLock, 1) == 1) ;
+            SpinWait.SpinUntil(() => Interlocked.Exchange(ref ioLock, 1) == 0);
             WriteBase(textColorInfo);
             System.Console.WriteLine();
             Interlocked.Exchange(ref ioLock, 0);
@@ -157,7 +157,7 @@ namespace TizzyT
         /// <param name="textColorInfo">Text and their color information.</param>        
         public static void Write(params ConsoleTextColorInfo[] textColorInfo)
         {
-            while (Interlocked.Exchange(ref ioLock, 1) == 1) ;
+            SpinWait.SpinUntil(() => Interlocked.Exchange(ref ioLock, 1) == 0);
             WriteBase(textColorInfo);
             Interlocked.Exchange(ref ioLock, 0);
         }
@@ -169,7 +169,7 @@ namespace TizzyT
         /// <returns>The users input.</returns>
         public static string PromptLine(params ConsoleTextColorInfo[] textColorInfo)
         {
-            while (Interlocked.Exchange(ref ioLock, 1) == 1) ;
+            SpinWait.SpinUntil(() => Interlocked.Exchange(ref ioLock, 1) == 0);
             WriteBase(textColorInfo);
             System.Console.WriteLine();
             string input = System.Console.ReadLine();
@@ -184,7 +184,7 @@ namespace TizzyT
         /// <returns>The users input.</returns>
         public static string Prompt(params ConsoleTextColorInfo[] textColorInfo)
         {
-            while (Interlocked.Exchange(ref ioLock, 1) == 1) ;
+            SpinWait.SpinUntil(() => Interlocked.Exchange(ref ioLock, 1) == 0);
             WriteBase(textColorInfo);
             string input = System.Console.ReadLine();
             Interlocked.Exchange(ref ioLock, 0);
