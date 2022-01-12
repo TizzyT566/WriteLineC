@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace TizzyT
+namespace WriteLineC
 {
     /// <summary>
     /// A helper to the System.Console class.

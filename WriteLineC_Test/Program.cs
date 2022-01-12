@@ -1,4 +1,4 @@
-﻿using static TizzyT.Console;
+﻿using static WriteLineC.Console;
 
 // Write normally
 WriteLine("Hello world");

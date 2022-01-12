@@ -42,7 +42,7 @@ public static string Prompt(params ConsoleTextColorInfo[] textColorInfo)
 ### Example
 
 ```csharp
-using static TizzyT.Console;
+using static WriteLineC.Console;
 
 // Write normally
 WriteLine("Hello world");
