@@ -161,5 +161,34 @@ namespace TizzyT
             WriteBase(args);
             Interlocked.Exchange(ref writeLock, 0);
         }
+
+        /// <summary>
+        /// Prompts the user for input with a message.
+        /// </summary>
+        /// <param name="message">The message to prompt the user.</param>
+        /// <returns>The users input.</returns>
+        public static string PromptLine(params ConsoleTextColorInfo[] message)
+        {
+            while (Interlocked.Exchange(ref writeLock, 1) == 1) ;
+            WriteBase(message);
+            System.Console.WriteLine();
+            string input = System.Console.ReadLine();
+            Interlocked.Exchange(ref writeLock, 0);
+            return input;
+        }
+
+        /// <summary>
+        /// Prompts the user for input with a message.
+        /// </summary>
+        /// <param name="message">The message to prompt the user.</param>
+        /// <returns>The users input.</returns>
+        public static string Prompt(params ConsoleTextColorInfo[] message)
+        {
+            while (Interlocked.Exchange(ref writeLock, 1) == 1) ;
+            WriteBase(message);
+            string input = System.Console.ReadLine();
+            Interlocked.Exchange(ref writeLock, 0);
+            return input;
+        }
     }
 }
