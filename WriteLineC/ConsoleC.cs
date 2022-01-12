@@ -8,7 +8,7 @@ namespace TizzyT
     public static class Console
     {
         /// <summary>
-        /// An object to store ConsoleColor information on how to print text.
+        /// Structure to store ConsoleColor information on how to print text.
         /// </summary>
         public struct ConsoleTextColorInfo
         {
