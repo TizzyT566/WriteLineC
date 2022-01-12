@@ -163,7 +163,7 @@ namespace TizzyT
         }
 
         /// <summary>
-        /// Prompts the user for input with a message.
+        /// Prompts the user for input after a message.
         /// </summary>
         /// <param name="message">The message to prompt the user.</param>
         /// <returns>The users input.</returns>
