@@ -1,12 +1,78 @@
 ﻿using System;
+using System.Threading;
 
 namespace TizzyT
 {
     /// <summary>
-    /// Represents the standard input, output, and error streams for console applications. This class cannot be inherited.
+    /// A helper to the System.Console class.
     /// </summary>
     public static class Console
     {
+        /// <summary>
+        /// The color black.
+        /// </summary>
+        public static ConsoleColor Black = ConsoleColor.Black;
+        /// <summary>
+        /// The color dark blue.
+        /// </summary>
+        public static ConsoleColor DarkBlue = ConsoleColor.DarkBlue;
+        /// <summary>
+        /// The color dark green.
+        /// </summary>
+        public static ConsoleColor DarkGreen = ConsoleColor.DarkGreen;
+        /// <summary>
+        /// The color dark cyan (dark blue-green).
+        /// </summary>
+        public static ConsoleColor DarkCyan = ConsoleColor.DarkCyan;
+        /// <summary>
+        /// The color dark red.
+        /// </summary>
+        public static ConsoleColor DarkRed = ConsoleColor.DarkRed;
+        /// <summary>
+        /// The color dark magenta (dark purplish-red).
+        /// </summary>
+        public static ConsoleColor DarkMagenta = ConsoleColor.DarkMagenta;
+        /// <summary>
+        /// The color dark yellow (ochre).
+        /// </summary>
+        public static ConsoleColor DarkYellow = ConsoleColor.DarkYellow;
+        /// <summary>
+        /// The color gray.
+        /// </summary>
+        public static ConsoleColor Gray = ConsoleColor.Gray;
+        /// <summary>
+        /// The color dark gray.
+        /// </summary>
+        public static ConsoleColor DarkGray = ConsoleColor.DarkGray;
+        /// <summary>
+        /// The color blue.
+        /// </summary>
+        public static ConsoleColor Blue = ConsoleColor.Blue;
+        /// <summary>
+        /// The color green.
+        /// </summary>
+        public static ConsoleColor Green = ConsoleColor.Green;
+        /// <summary>
+        /// The color cyan (blue-green).
+        /// </summary>
+        public static ConsoleColor Cyan = ConsoleColor.Cyan;
+        /// <summary>
+        /// The color red.
+        /// </summary>
+        public static ConsoleColor Red = ConsoleColor.Red;
+        /// <summary>
+        /// The color magenta (purplish-red).
+        /// </summary>
+        public static ConsoleColor Magenta = ConsoleColor.Magenta;
+        /// <summary>
+        /// The color yellow.
+        /// </summary>
+        public static ConsoleColor Yellow = ConsoleColor.Yellow;
+        /// <summary>
+        /// The color white.
+        /// </summary>
+        public static ConsoleColor White = ConsoleColor.White;
+
         /// <summary>
         /// Structure to store ConsoleColor information on how to print text.
         /// </summary>
@@ -57,21 +123,9 @@ namespace TizzyT
                 new(args.text, args.foreColor, args.backColor);
         }
 
-        /// <summary>
-        /// Synonymous to System.Console.WriteLine() with ability to include ConsoleColor information.
-        /// </summary>
-        /// <param name="args"></param>
-        public static void WriteLine(params ConsoleTextColorInfo[] args)
-        {
-            Write(args);
-            System.Console.WriteLine();
-        }
+        private static int writeLock = 0;
 
-        /// <summary>
-        /// Synonymous to System.Console.Write() with ability to include ConsoleColor information.
-        /// </summary>
-        /// <param name="args"></param>
-        public static void Write(params ConsoleTextColorInfo[] args)
+        private static void WriteBase(params ConsoleTextColorInfo[] args)
         {
             ConsoleColor prevFore = System.Console.ForegroundColor;
             ConsoleColor prevBack = System.Console.BackgroundColor;
@@ -83,6 +137,29 @@ namespace TizzyT
             }
             System.Console.ForegroundColor = prevFore;
             System.Console.BackgroundColor = prevBack;
+        }
+
+        /// <summary>
+        /// Synonymous to System.Console.WriteLine() with ability to include ConsoleColor information.
+        /// </summary>
+        /// <param name="args"></param>
+        public static void WriteLine(params ConsoleTextColorInfo[] args)
+        {
+            while (Interlocked.Exchange(ref writeLock, 1) == 1) ;
+            WriteBase(args);
+            System.Console.WriteLine();
+            Interlocked.Exchange(ref writeLock, 0);
+        }
+
+        /// <summary>
+        /// Synonymous to System.Console.Write() with ability to include ConsoleColor information.
+        /// </summary>
+        /// <param name="args"></param>        
+        public static void Write(params ConsoleTextColorInfo[] args)
+        {
+            while (Interlocked.Exchange(ref writeLock, 1) == 1) ;
+            WriteBase(args);
+            Interlocked.Exchange(ref writeLock, 0);
         }
     }
 }

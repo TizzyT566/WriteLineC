@@ -1,5 +1,10 @@
-﻿using Console = TizzyT.Console;
+﻿using static TizzyT.Console;
 
-Console.WriteLine("Hello world");
+// Write normally
+WriteLine("Hello world");
 
-Console.WriteLine(("Hello", ConsoleColor.Red), " ", ("world", null, ConsoleColor.Green));
+// Write text in red
+WriteLine(("Hello World", Red));
+
+// Write Hello in read and world in blue with green background
+WriteLine(("Hello", Red), " ", ("world", Blue, Green));
